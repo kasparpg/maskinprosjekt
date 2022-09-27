@@ -3,6 +3,8 @@ TDT4173 Maskinlæring gruppeprosjekt (Retail Revenue Prediction)
 
 Laget med XGBoost foreløpig. 
 
+<h1>SAMTALE MED STUD.ASS:</h1>
+
 Spørsmål:
 
 <img width="783" alt="Screenshot 2022-09-27 at 15 01 32" src="https://user-images.githubusercontent.com/43644986/192533531-512544ac-9f20-42da-8c0a-288ff718a7a7.png">
