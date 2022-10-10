@@ -11,7 +11,7 @@ def rmsle(predt: np.ndarray, dtrain: xgb.DMatrix) -> Tuple[str, float]:
     y = dtrain.get_label()
     predt[predt < -1] = -1 + 1e-6
     elements = np.power(np.log1p(y) - np.log1p(predt), 2)
-    return 'PyRMSLE', float(np.sqrt(np.sum(elements) / len(y)))
+    return 'RMSLE', float(np.sqrt(np.sum(elements) / len(y)))
 
 
 def gradient(predt: np.ndarray, dtrain: xgb.DMatrix) -> np.ndarray:
