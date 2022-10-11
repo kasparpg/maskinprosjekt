@@ -74,9 +74,6 @@ def generate_features(df, spatial_features, age_features, income_features,
     y = pd.get_dummies(df.chain_name, prefix='Chain')
     df.append(y)
 
-
-
-
     # # # # # # # # # # # # #
     # # FEATURE SELECTION # #
 
@@ -95,10 +92,14 @@ def generate_features(df, spatial_features, age_features, income_features,
     df['municipality_name'] = df['municipality_name'].astype('category')
     df['geometry'] = df['geometry'].astype('category')
 
-    """
+
     age_features.drop_duplicates(subset=['grunnkrets_id'])  # remove duplicates from age data
     df = pd.merge(df, age_features.drop_duplicates(subset=['grunnkrets_id']), how='left')  # merge with the age data.
-    """
+    age_children = ['age_0,age_1,age_2,age_3,age_4,age_5,age_6,age_7,age_8,age_9,'
+                    'age_10,age_11,age_12,age_13,age_14,age_15,age_16']
+    df['age0-16'] = df[age_children].sum(axis=1)
+    df.drop(age_children)
+
     income_features.drop_duplicates(subset=['grunnkrets_id'])  # remove duplicates from income data
     df = pd.merge(df, income_features.drop_duplicates(subset=['grunnkrets_id']), how='left')  # merge with the income data.
     """
@@ -200,7 +201,7 @@ else:
     print("--> model saved.")
 
 # plot_data(generate_features(train, spatial, age, income, households, plaace, busstops), 0)
-
+print(generate_features(train, spatial, age, income, households, plaace, busstops).info())
 print("\nAttempting to start prediction...")
 ypred = bst.predict(dtest, ntree_limit=bst.best_iteration)
 print("--> Prediction finished.")
