@@ -1,5 +1,5 @@
 import pandas
-from catboost import CatBoostRegressor, Pool
+from catboost import CatBoostRegressor, Pool, CatBoostClassifier
 import pandas as pd
 import os.path
 import numpy as np
@@ -10,8 +10,10 @@ from gensim.models import Word2Vec
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from sklearn.cluster import KMeans
 import joblib
-
-
+from sklearn.model_selection import RandomizedSearchCV, KFold, GridSearchCV
+from scipy.stats import uniform, randint
+from sklearn.metrics import make_scorer
+import time
 
 from xgboost import plot_importance
 import warnings
@@ -205,7 +207,18 @@ def generate_features(df: pd.DataFrame):
 
     return df
 
-def random_k_fold(X, y, model=None, params=None, k=5, n_iter=20, verbose=10, n_jobs=-1):
+def _rmsle(X, y):
+    y[y < -1] = -1 + 1e-6
+    elements = np.power(np.log1p(y) - np.log1p(y), 2)
+    return 'RMSLE', float(np.sqrt(np.sum(elements) / len(y)))
+
+def _rmsle_vanilla(y_pred, y_true):
+    elements = np.power(np.log1p(y_pred) - np.log1p(y_true), 2)
+    return float(np.sqrt(np.sum(elements) / len(y_true)))
+
+
+rmsle_scorer = make_scorer(_rmsle_vanilla, greater_is_better=False)
+def random_k_fold(X, y, model=None, params=None, cat_features=None, k=5, n_iter=20, verbose=10, n_jobs=-1):
     # Parameter grid for XGBoost
     params = {"colsample_bytree": uniform(0.3, 0.7),
               "gamma": uniform(0, 0.5),
@@ -220,7 +233,7 @@ def random_k_fold(X, y, model=None, params=None, k=5, n_iter=20, verbose=10, n_j
 
     kfold = KFold(n_splits=k, shuffle=True)
 
-    model = XGBRegressor() if model is None else model
+    model = CatBoostRegressor(cat_features=cat_features) if model is None else model
     randm_src = RandomizedSearchCV(model, param_distributions=params, n_iter=n_iter,
                                    scoring=rmsle_scorer, verbose=verbose,
                                    cv=kfold.split(X, y), n_jobs=n_jobs)
@@ -242,9 +255,15 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, train_size=.8)
 X_train, X_val = generate_features(X_train), generate_features(X_val)
 X_test = generate_features(test)
 
-pool_train = Pool(X_train, y_train, cat_features=list(X_train.select_dtypes(include=['category']).columns))
+cat_features = list(X_train.select_dtypes(include=['category']).columns)
 
-pool_test = Pool(X_test, cat_features=list(X_test.select_dtypes(include=['category']).columns))
+pool_train = Pool(X_train, y_train, cat_features=cat_features)
+pool_test = Pool(X_test, cat_features=cat_features)
+
+parameters = {'depth': randint(2, 20),
+              'learning_rate': uniform(0.01, 0.4),
+              'iterations': randint(10, 1000),
+              }
 
 model = CatBoostRegressor(iterations=2,
                           learning_rate=1,
@@ -252,7 +271,9 @@ model = CatBoostRegressor(iterations=2,
 
 model.fit(pool_train)
 
+random_k_fold(X_train, y_train, None, parameters, cat_features)
 y_pred = model.predict(pool_test)
 
 submission['predicted'] = np.array(y_pred)
 submission.to_csv('submissions/submission.csv', index=False)
+
