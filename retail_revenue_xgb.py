@@ -196,7 +196,7 @@ def generate_features(df, spatial_features, age_features, income_features,
 
     return df
 
-
+"""
 # TRAIN BUFFER
 if os.path.exists('modeling/train.buffer'):
     print("\ntrain.buffer already exists. Attempting to load...")
@@ -242,18 +242,20 @@ if os.path.exists(model_to_load):
 else:
     print("\nNo model found. Attempt at creating a new one will now start:")
     print("Attempting to initialize parameters for training...")
-    param = {'max_depth': 30, 'eta': 0.1, 'objective': 'reg:squarederror'}
-    num_round = 1000
+    params = {'colsample_bytree': 0.5478255177656529, 'learning_rate': 0.02853786979050646, 'max_depth': 7, 'min_child_weight': 1, 'n_estimators': 195, 'subsample': 0.9733176496063143}
+    params['disable_default_eval_metric'] = True
+    num_round = 10000
     evallist = [(dtest, 'eval'), (dtrain, 'train')]
     print("--> parameters for training initialized.")
 
     print("Attempting to start training...")
-    bst = xgb.train(param, dtrain, num_round, evallist, early_stopping_rounds=10)
+    bst = xgb.train(params, dtrain, num_round, evallist, early_stopping_rounds=10)
     print("--> model trained.")
 
     print("Attempting to save model...")
     bst.save_model(model_to_load)
     print("--> model saved.")
+
 
 # plot_data(generate_features(train, spatial, age, income, households, plaace, busstops))
 print("\nAttempting to start prediction...")
@@ -268,3 +270,5 @@ print("--> prediction saved with features as name in submission folder.")
 
 plot_importance(bst)
 plt.show()
+
+"""
