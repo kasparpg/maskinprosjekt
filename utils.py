@@ -9,6 +9,21 @@ from shapely.geometry import Point, LineString
 from sklearn.preprocessing import LabelEncoder
 
 
+def to_categorical(df: pd.DataFrame):
+    for cat_col in df.select_dtypes(include=[object]).columns:
+        df[cat_col] = df[cat_col].astype('category')
+
+    return df
+
+
+def nan_to_string(df: pd.DataFrame):
+    nan = '#N/A'
+    # cols = df.select_dtypes(include=[object]).columns
+    cols = df[df.columns[df.isna().any()]].columns
+    df[cols] = df[cols].fillna(nan)
+    return df
+
+
 def rmsle_xgb(predt: np.ndarray, dtrain: xgb.DMatrix) -> Tuple[str, float]:
     ''' Root mean squared log error metric.
 
@@ -70,7 +85,7 @@ def group_ages(age: pd.DataFrame, age_ranges: List[Tuple[int, int]]):
 
     for rng in age_ranges:
         cols = [f'age_{age}' for age in range(rng[0], rng[1] + 1)]
-        rng_sum = age[cols].sum(axis=1).astype('int32')
+        rng_sum = age[cols].sum(axis=1).astype(int)
         age_new[f'age_{rng[0]}_{rng[-1]}'] = rng_sum
 
     age = age.drop_duplicates(subset='grunnkrets_id').drop(columns=['year', *(f'age_{age}' for age in range(0, 91))], axis=1)
