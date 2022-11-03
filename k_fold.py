@@ -22,27 +22,28 @@ def _rmsle_vanilla(y_pred, y_true):
     return float(np.sqrt(np.sum(elements) / len(y_true)))
 
 
-rmsle_scorer = make_scorer(_rmsle_vanilla, greater_is_better=False)
+_rmsle_scorer = make_scorer(_rmsle_vanilla, greater_is_better=False)
 
 
 def random_k_fold(X, y, model=None, params=None, k=5, n_iter=20, verbose=10, n_jobs=-1):
+    """ Does k-fold cross validation. No output unless n_jobs == 1. """
     # Parameter grid for XGBoost
-    params = {"colsample_bytree": uniform(0.3, 0.7),
+    params = {"colsample_bytree": uniform(0.4, 0.5),
               "gamma": uniform(0, 0.5),
               "learning_rate": uniform(0.003, 0.3),  # default 0.1
-              "max_depth": randint(2, 6),  # default 3
-              "n_estimators": randint(100, 400),  # default 100
+              "max_depth": randint(3, 9),  # default 3
+              "n_estimators": randint(100, 350),  # default 100
               "subsample": uniform(0.6, 0.4),
               'objective': ['reg:squaredlogerror'],
               'eval_metric': [_rmsle],
-              'min_child_weight': randint(3, 8),
+              'min_child_weight': randint(1, 6),
               'max_depth': randint(5, 10)} if params is None else params
 
     kfold = KFold(n_splits=k, shuffle=True)
 
     model = XGBRegressor() if model is None else model
     randm_src = RandomizedSearchCV(model, param_distributions=params, n_iter=n_iter,
-                                   scoring=rmsle_scorer, verbose=verbose,
+                                   scoring=_rmsle_scorer, verbose=verbose,
                                    cv=kfold.split(X, y), n_jobs=n_jobs)
 
     start = time.time()
