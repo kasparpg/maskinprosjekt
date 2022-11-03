@@ -6,13 +6,20 @@ import pandas as pd
 
 from pyproj import Geod
 from shapely.geometry import Point, LineString
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OrdinalEncoder
 
 
 def to_categorical(df: pd.DataFrame):
     for cat_col in df.select_dtypes(include=[object]).columns:
         df[cat_col] = df[cat_col].astype('category')
 
+    return df
+
+
+def object_encoder(df: pd.DataFrame):
+    enc = OrdinalEncoder()
+    obj_cols = df.select_dtypes(include=[object]).columns
+    df[obj_cols] = enc.fit_transform(df[obj_cols])
     return df
 
 
