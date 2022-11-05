@@ -11,10 +11,10 @@ from scipy.stats import uniform, randint
 from sklearn.metrics import make_scorer
 
 
-def _rmsle(X, y):
-    y[y < -1] = -1 + 1e-6
-    elements = np.power(np.log1p(y) - np.log1p(y), 2)
-    return 'RMSLE', float(np.sqrt(np.sum(elements) / len(y)))
+def _rmsle(y_pred, y_true):
+    y_pred[y_pred < -1] = -1 + 1e-6
+    elements = np.power(np.log1p(y_pred) - np.log1p(y_true), 2)
+    return 'RMSLE', float(np.sqrt(np.sum(elements) / len(y_true)))
 
 
 def _rmsle_vanilla(y_pred, y_true):
@@ -23,6 +23,7 @@ def _rmsle_vanilla(y_pred, y_true):
 
 
 _rmsle_scorer = make_scorer(_rmsle_vanilla, greater_is_better=False)
+
 
 def random_k_fold(X, y, model=None, params=None, k=5, n_iter=20, verbose=10, n_jobs=-1):
     """ Does k-fold cross validation. No output unless n_jobs == 1. """
