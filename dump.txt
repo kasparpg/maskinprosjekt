@@ -1,0 +1,7 @@
+# params = {
+    #     'max_depth': np.arange(4, 10),
+    #     'learning_rate': np.linspace(0.01, 0.03, 10),
+    #     # 'num_boost_rounds': np.arange(100, 400, 20),
+    #     'colsample_bytree': np.linspace(0.5, 1, 10)
+    # }      
+    # params = xgb_cross_validation(params, dtrain)
