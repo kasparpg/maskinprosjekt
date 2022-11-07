@@ -87,6 +87,7 @@ def generate_features(df: pd.DataFrame):
     df.append(y)
     """
 
+    data = df[['lat', 'lon']]
     # # # # # # # # # # # # #
     # # FEATURE SELECTION # #
 
@@ -233,7 +234,7 @@ def random_k_fold(X, y, model=None, params=None, cat_features=None, k=5, n_iter=
 
     kfold = KFold(n_splits=k, shuffle=True)
 
-    model = CatBoostRegressor(cat_features=cat_features) if model is None else model
+    # model = CatBoostRegressor(cat_features=cat_features) if model is None else model
     randm_src = RandomizedSearchCV(model, param_distributions=params, n_iter=n_iter,
                                    scoring=rmsle_scorer, verbose=verbose,
                                    cv=kfold.split(X, y), n_jobs=n_jobs)
@@ -262,16 +263,13 @@ pool_test = Pool(X_test, cat_features=cat_features)
 
 parameters = {'depth': randint(2, 20),
               'learning_rate': uniform(0.01, 0.4),
-              'iterations': randint(10, 1000),
+              'iterations': randint(10, 1000)
               }
 
-model = CatBoostRegressor(iterations=2,
-                          learning_rate=1,
-                          depth=2)
 
-model.fit(pool_train)
+model = CatBoostRegressor(verbose=False, cat_features=cat_features, eval_metric="RMSE")
 
-random_k_fold(X_train, y_train, None, parameters, cat_features)
+random_k_fold(X_train, y_train, model, parameters, cat_features, verbose=10)
 y_pred = model.predict(pool_test)
 
 submission['predicted'] = np.array(y_pred)
