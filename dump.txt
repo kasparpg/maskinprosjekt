@@ -14,3 +14,8 @@
  'objective': <objectives_and_metrics.RmseObjective at 0x7fdc1919a610>,
  'depth': 7.0,
  'learning_rate': 0.0494195212108839}
+
+ 0.7270089548135714 {'colsample_bylevel': 0.07329097359385545, 'depth': 9, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'bagging_temperature': 1.1734504015536018}
+
+Value: 0.7432044519085643
+{'depth': 9, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'subsample': 0.635180352520854}
