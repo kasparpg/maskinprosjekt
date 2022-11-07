@@ -5,3 +5,12 @@
     #     'colsample_bytree': np.linspace(0.5, 1, 10)
     # }      
     # params = xgb_cross_validation(params, dtrain)
+
+
+    {'iterations': 265.0,
+ 'loss_function': 'RMSE',
+ 'verbose': 0,
+ 'eval_metric': <objectives_and_metrics.LogTargetsRmsleMetric at 0x7fdc1919a940>,
+ 'objective': <objectives_and_metrics.RmseObjective at 0x7fdc1919a610>,
+ 'depth': 7.0,
+ 'learning_rate': 0.0494195212108839}
