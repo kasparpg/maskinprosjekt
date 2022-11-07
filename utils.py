@@ -7,6 +7,7 @@ import pandas as pd
 from pyproj import Geod
 from shapely.geometry import Point, LineString
 from sklearn.preprocessing import OrdinalEncoder
+from objectives_and_metrics import rmsle_xgb
 
 
 def to_categorical(df: pd.DataFrame):
@@ -30,16 +31,6 @@ def nan_to_string(df: pd.DataFrame):
     df[cols] = df[cols].fillna(nan)
     return df
 
-
-def rmsle_xgb(predt: np.ndarray, dtrain: xgb.DMatrix) -> Tuple[str, float]:
-    ''' Root mean squared log error metric.
-
-        :math:`\sqrt{\frac{1}{N}[log(pred + 1) - log(label + 1)]^2}`
-        '''
-    y = dtrain.get_label()
-    predt[predt < -1] = -1 + 1e-6
-    elements = np.power(np.log1p(y) - np.log1p(predt), 2)
-    return 'RMSLE', float(np.sqrt(np.sum(elements) / len(y)))
 
 
 def gradient(predt: np.ndarray, dtrain: xgb.DMatrix) -> np.ndarray:
