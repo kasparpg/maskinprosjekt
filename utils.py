@@ -4,7 +4,7 @@ import numpy as np
 import itertools
 import pandas as pd
 
-from pyproj import Geod
+# from pyproj import Geod
 from shapely.geometry import Point, LineString
 from sklearn.preprocessing import OrdinalEncoder
 
