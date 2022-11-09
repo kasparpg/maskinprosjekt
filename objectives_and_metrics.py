@@ -3,15 +3,16 @@ import xgboost as xgb
 
 from sklearn.metrics import make_scorer
 from typing import Tuple
+from sklearn.metrics import mean_squared_log_error
 
 
-def _rmsle(y, y_pred):
-    y_pred[y_pred < -1] = -1 + 1e-6
-    elements = np.power(np.log1p(y_pred) - np.log1p(y), 2)
-    return 'RMSLE', float(np.sqrt(np.sum(elements) / len(y)))
+def rmsle(y_true, y_pred):
+    y_pred[y_pred < 0] = 0 + 1e-6
+    y_true[y_true < 0] = 0 + 1e-6
+    return np.sqrt(mean_squared_log_error(y_true, y_pred))
 
 
-rmsle_scorer = make_scorer(lambda y, y_true: _rmsle(y, y_true)[1], greater_is_better=False)
+rmsle_scorer = make_scorer(lambda y, y_true: rmsle(y, y_true), greater_is_better=False)
 
 
 def rmsle_xgb(predt: np.ndarray, dtrain: xgb.DMatrix) -> Tuple[str, float]:
