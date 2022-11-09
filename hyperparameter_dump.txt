@@ -1,3 +1,5 @@
+324
+
 params = {
     'iterations': 2000,
     'learning_rate': 0.03,
@@ -53,6 +55,11 @@ Best trial:
 Value: 0.7124988673592206
 Params:
 {'depth': 6, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'subsample': 0.675824912923723}
+
+
+Value: 0.7108413003932254
+Params:
+{'depth': 9, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'subsample': 0.7494756089749968}
 
 
 
