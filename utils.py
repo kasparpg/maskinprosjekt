@@ -27,10 +27,10 @@ def object_encoder(df: pd.DataFrame):
 def nan_to_string(df: pd.DataFrame):
     nan = '#N/A'
     # cols = df.select_dtypes(include=[object]).columns
+    print('\n\n', df.isna().sum())
     cols = df[df.columns[df.isna().any()]].columns
     df[cols] = df[cols].fillna(nan)
     return df
-
 
 
 def gradient(predt: np.ndarray, dtrain: xgb.DMatrix) -> np.ndarray:
