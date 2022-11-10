@@ -1,3 +1,8 @@
 # spatial_merge = spatial.drop(columns=['year']).drop_duplicates(subset=['grunnkrets_id'])
 # income_merge = income.drop(columns=['year']).drop_duplicates(subset='grunnkrets_id')
 # households_merge = households.drop(columns=['year']).drop_duplicates(subset='grunnkrets_id')
+
+
+        # obj_feat = list(df.loc[:, X.types == 'object'].columns.values)
+        # for feat in obj_feat:
+        #     df[feat] = pd.Series(X[feat], dtype='category')
