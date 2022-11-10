@@ -26,7 +26,7 @@ def object_encoder(df: pd.DataFrame):
 
 def nan_to_string(df: pd.DataFrame):
     nan = '#N/A'
-    print('\n\n', df.isna().sum())
+    # print('\n\n', df.isna().sum())
     cols = df[df.columns[df.isna().any()]].columns
     df[cols] = df[cols].fillna(nan)
     return df
@@ -95,3 +95,20 @@ def only_2016_data(df: pd.DataFrame):
     df = df.sort_values(by='year', ascending=False)
     df = df.drop_duplicates(subset='grunnkrets_id', keep='first')
     return df
+
+
+def clean_out_nan_heavy_rows(df: pd.DataFrame, age, age_ranges, spatial_2016, income_2016, households_2016):
+    """Cleans out rows that have no match in the age, spatial, income or household datasets."""
+
+    df2 = df.merge(group_ages(age, age_ranges), on='grunnkrets_id', how='left')
+    df2 = df2.merge(spatial_2016.drop(columns=['year']), on='grunnkrets_id', how='left')
+    df2 = df2.merge(income_2016.drop(columns=['year']), on='grunnkrets_id', how='left')
+    df2 = df2.merge(households_2016.drop(columns=['year']), on='grunnkrets_id', how='left')
+
+    df_cleaned = df2[
+        ~(df2.age_0_19.isna() | df2.couple_children_0_to_5_years.isna() | df2.grunnkrets_name.isna() | df2.income_all_households.isna())
+    ]
+
+    print(f'Cleaned out {len(df) - len(df_cleaned)} out of {len(df)} rows.')
+
+    return df_cleaned
