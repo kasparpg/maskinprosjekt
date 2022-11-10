@@ -62,7 +62,10 @@ Params:
 {'depth': 9, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'subsample': 0.7494756089749968}
 
 
-
+Best trial:
+Value: 0.7129629189723515
+Params:
+{'depth': 9, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'subsample': 0.8268392639052132}
 
 
 
