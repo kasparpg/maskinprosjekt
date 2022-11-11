@@ -6,7 +6,7 @@ import pandas as pd
 
 from pyproj import Geod
 from shapely.geometry import Point, LineString
-from sklearn.preprocessing import OrdinalEncoder
+from sklearn.preprocessing import OrdinalEncoder, LabelEncoder
 from objectives_and_metrics import rmsle_xgb
 
 
