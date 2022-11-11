@@ -1,1 +1,4 @@
 removing rows with revenue == 0 or revenue > 50 DID NOT HELP
+
+
+SEED = 23 bra for Catboost

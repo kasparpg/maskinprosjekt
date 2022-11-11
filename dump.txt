@@ -6,3 +6,50 @@
         # obj_feat = list(df.loc[:, X.types == 'object'].columns.values)
         # for feat in obj_feat:
         #     df[feat] = pd.Series(X[feat], dtype='category')
+
+
+from sklearn.ensemble import StackingRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
+
+# cbm_transformer = FunctionTransformer(lambda X: generate_features(X, data_origin='train', predictor='cb'))
+# tcbm = Pipeline(
+#     [('cbm_feat_gen', cbm_transformer), ('cbm', cbm)]
+# )
+
+# lgbm_transformer = FunctionTransformer(lambda X: generate_features(X, data_origin='train', predictor='lgb'))
+# tlgbm = Pipeline(
+#     [('lgbm_feat_gen', lgbm_transformer), ('lgbm', lgbm)]
+# )
+
+# lvl0 = [
+#     ('tcbm', tcbm),
+#     ('tlgbm', tlgbm)
+# ]
+
+cbm2 = cb.CatBoostRegressor()
+lgbm2 = lgb.LGBMRegressor()
+
+lvl0 = [
+    ('tcbm', cbm2),
+    ('tlgbm', lgbm2)
+]
+
+lvl1 = LinearRegression()
+
+model = StackingRegressor(estimators=lvl0, final_estimator=lvl1, cv=5)
+model.fit(generate_features(X_train, data_origin='train'), y_train)
+
+y_pred = np.expm1(model.predict(generate_features(X_val, data_origin='train')))
+score = rmsle(np.expm1(y_val), y_pred)
+
+score
+
+
+# feature_importance = model.feature_importances_
+# sorted_idx = np.argsort(feature_importance)
+# fig = plt.figure(figsize=(12, 6))
+# plt.barh(range(len(sorted_idx)), feature_importance[sorted_idx], align='center')
+# plt.yticks(range(len(sorted_idx)), np.array(X_test.columns)[sorted_idx])
+# plt.title('Feature Importance')
