@@ -108,3 +108,19 @@ Best trial (72):
 Value: 0.711248860913502
 Params:
 {'lambda_l1': 0.0166666730935842, 'lambda_l2': 0.07711845771465907, 'num_leaves': 12, 'feature_fraction': 0.8696975226415213, 'min_child_samples': 67, 'boosting_type': 'gbdt'}
+
+
+[BEST RUN YET]
+<Catboost>
+Number of finished trials: 51
+Best trial (38):
+Value: 0.7164880358105549
+Params:
+{'depth': 9, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'l2_leaf_reg': 4.077158772366956, 'subsample': 0.5858387998145075}
+
+<LGBM>
+Number of finished trials: 200
+Best trial (67):
+Value: 0.720211809513416
+Params:
+{'lambda_l1': 0.026873437304227192, 'lambda_l2': 9.270495297846024, 'num_leaves': 7, 'feature_fraction': 0.8633788253368204, 'min_child_samples': 81, 'boosting_type': 'gbdt'}
