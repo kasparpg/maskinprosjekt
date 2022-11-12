@@ -73,7 +73,7 @@ def generate_features(df: pd.DataFrame):
 
     # joblib.dump(kmeans, "kmeans/kmeans"+str(rounds)+".joblib")
 
-    # kmeans = joblib.load("kmeans_train/kmeans"+str(kmeans_round)+".joblib")
+    # kmeans = joblib.load("kmeans189.joblib")
     # kmeans = KMeans(n_clusters=110, random_state=0).fit(np.column_stack((df['lat'], df['lon'])))
     # joblib.dump(kmeans, "kmeans_train/kmeans" + str(rounds) + ".joblib")
 
