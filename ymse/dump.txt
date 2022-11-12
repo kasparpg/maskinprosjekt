@@ -144,3 +144,19 @@ X_test_h20 = X_test_lgb
 #     df['closest_cluster_centroid_dist'] = df.progress_apply(lambda row: closest_centroid(row.lat, row.lon), axis=1)
     
 #     return df
+
+
+dtrain_lgb, dvalid_lgb = get_lgb_dmatrices()
+lgbm = lgb.train(
+    params={**get_lgb_params()[1], **{'lambda_l1': 0.026873437304227192, 'lambda_l2': 9.270495297846024, 'num_leaves': 7, 'feature_fraction': 0.8633788253368204, 'min_child_samples': 81, 'boosting_type': 'gbdt'}},
+    train_set=dtrain_lgb,
+    valid_sets=dvalid_lgb,
+    verbose_eval=False
+)
+y_val_pred_lgb = np.expm1(lgbm.predict(X_val_lgb))
+score = rmsle(np.expm1(y_val), y_val_pred_lgb)
+print(score)
+
+y_pred_lgb = np.expm1(lgbm.predict(X_val_lgb))
+print(rmsle(np.expm1(y_val), y_pred_cb))
+y_pred_test_lgb = np.expm1(lgbm.predict(X_test_lgb))
