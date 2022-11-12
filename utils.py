@@ -1,13 +1,18 @@
 import xgboost as xgb
 from typing import List, Tuple, Dict
 import numpy as np
-import itertools
 import pandas as pd
+import pandas as pd
+import numpy as np
 
 from pyproj import Geod
 from shapely.geometry import Point, LineString
+from sklearn.cluster import DBSCAN
+from shapely.geometry import Point, LineString
 from sklearn.preprocessing import OrdinalEncoder, LabelEncoder
-from objectives_and_metrics import rmsle_xgb
+from tqdm import tqdm
+
+tqdm.pandas()
 
 
 def to_categorical(df: pd.DataFrame):
@@ -112,3 +117,29 @@ def clean_out_nan_heavy_rows(df: pd.DataFrame, age, age_ranges, spatial_2016, in
     print(f'Cleaned out {len(df) - len(df_cleaned)} out of {len(df)} rows.')
 
     return df_cleaned
+
+
+def add_spatial_clusters(df: pd.DataFrame):
+    clusters = DBSCAN(eps=0.145, min_samples=100)
+    # clusters = DBSCAN(eps=0.12, min_samples=30)
+    cl = clusters.fit_predict(df[['lat', 'lon']].to_numpy())
+    cl_counts = dict(zip(*np.unique(cl, return_counts=True)))
+
+    print(len(set(cl)), 'clusters created')
+    print('Cluster counts:', cl_counts)
+
+    df['cluster_id'] = cl
+    df['cluster_member_count'] = df.apply(lambda row: cl_counts[row.cluster_id], axis=1)
+
+    X_no_outliers = df[df.cluster_id != -1]
+    cluster_centroids = X_no_outliers.groupby('cluster_id')[['lat', 'lon']].mean()
+
+    def closest_centroid(lat, lon):
+        dist_series = cluster_centroids.apply(lambda row: meter_distance(lat, lon, row.lat, row.lon), axis=1)
+        return dist_series.min()
+
+    print('Calculating distance to closest cluster for each data point...')
+    df['closest_cluster_centroid_dist'] = df.progress_apply(lambda row: closest_centroid(row.lat, row.lon), axis=1)
+    
+    return df
+
