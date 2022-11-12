@@ -2,8 +2,8 @@ import numpy as np
 import xgboost as xgb
 
 from sklearn.metrics import make_scorer
-from typing import Tuple
 from sklearn.metrics import mean_squared_log_error
+from typing import Tuple
 
 
 def rmsle(y_true, y_pred):
