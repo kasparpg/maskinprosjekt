@@ -74,3 +74,37 @@ Params:
 # pruning_callback = optuna.integration.CatBoostPruningCallback(trial, 'LogTargetsRmsleMetric')
 # callbacks=[pruning_callback]
 # pruning_callback.check_pruned()
+
+
+Number of finished trials: 44
+Best trial:
+Value: 0.7160308623448512
+Params:
+{'depth': 9, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'l2_leaf_reg': 5.592882299684149, 'subsample': 0.7133546799469724}
+
+# tuned_params = {'depth': 6, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'bagging_temperature': 0.03251749341592476}
+
+
+
+loaded_model = cb.CatBoostRegressor(**non_tunable_params, **tuned_params, iterations=1000).load_model('models/0.71681')
+y_pred = np.expm1(loaded_model.predict(X_val))
+print(rmsle(np.expm1(y_val), y_pred))
+
+y_pred_test = np.expm1(model.predict(X_test))
+submission['predicted'] = y_pred_test
+submission.to_csv('submissions/submission.csv', index=False)
+
+
+[LGBM]
+Best trial:
+Value: 0.7216060716237851
+Params:
+{'lambda_l1': 3.9184295206330435, 'lambda_l2': 0.004203836952611867, 'num_leaves': 10, 'feature_fraction': 0.496381309457092, 'bagging_fraction': 0.9756442075532225, 'bagging_freq': 4, 'min_child_samples': 24}
+
+
+[LGBM]
+Number of finished trials: 100
+Best trial (72):
+Value: 0.711248860913502
+Params:
+{'lambda_l1': 0.0166666730935842, 'lambda_l2': 0.07711845771465907, 'num_leaves': 12, 'feature_fraction': 0.8696975226415213, 'min_child_samples': 67, 'boosting_type': 'gbdt'}
