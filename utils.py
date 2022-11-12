@@ -14,11 +14,9 @@ from tqdm import tqdm
 
 tqdm.pandas()
 
-
 def to_categorical(df: pd.DataFrame):
     for cat_col in df.select_dtypes(include=[object]).columns:
         df[cat_col] = df[cat_col].astype('category')
-
     return df
 
 
@@ -113,6 +111,7 @@ def clean_out_nan_heavy_rows(df: pd.DataFrame, age, age_ranges, spatial_2016, in
         ~(df2.age_0_19.isna() | df2.couple_children_0_to_5_years.isna() | df2.grunnkrets_name.isna() | df2.income_all_households.isna())
     ]
 
+
     print(f'Cleaned out {len(df) - len(df_cleaned)} out of {len(df)} rows.')
 
     return df_cleaned
@@ -141,4 +140,6 @@ def add_spatial_clusters(df: pd.DataFrame):
     df['closest_cluster_centroid_dist'] = df.progress_apply(lambda row: closest_centroid(row.lat, row.lon), axis=1)
     
     return df
+
+
 

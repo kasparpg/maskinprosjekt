@@ -118,3 +118,29 @@ score
 X_train_h2o = X_train_lgb
 X_val_h2o = X_val_lgb
 X_test_h20 = X_test_lgb
+
+
+
+# def add_spatial_clusters(df: pd.DataFrame):
+#     clusters = DBSCAN(eps=0.145, min_samples=100)
+#     # clusters = DBSCAN(eps=0.12, min_samples=30)
+#     cl = clusters.fit_predict(df[['lat', 'lon']].to_numpy())
+#     cl_counts = dict(zip(*np.unique(cl, return_counts=True)))
+
+#     print(len(set(cl)), 'clusters created')
+#     print('Cluster counts:', cl_counts)
+
+#     df['cluster_id'] = cl
+#     df['cluster_member_count'] = df.apply(lambda row: cl_counts[row.cluster_id], axis=1)
+
+#     X_no_outliers = df[df.cluster_id != -1]
+#     cluster_centroids = X_no_outliers.groupby('cluster_id')[['lat', 'lon']].mean()
+
+#     def closest_centroid(lat, lon):
+#         dist_series = cluster_centroids.apply(lambda row: meter_distance(lat, lon, row.lat, row.lon), axis=1)
+#         return dist_series.min()
+
+#     print('Calculating distance to closest cluster for each data point...')
+#     df['closest_cluster_centroid_dist'] = df.progress_apply(lambda row: closest_centroid(row.lat, row.lon), axis=1)
+    
+#     return df
