@@ -53,3 +53,68 @@ score
 # plt.barh(range(len(sorted_idx)), feature_importance[sorted_idx], align='center')
 # plt.yticks(range(len(sorted_idx)), np.array(X_test.columns)[sorted_idx])
 # plt.title('Feature Importance')
+
+
+  
+    # if model_name == 'xgb':
+    #     dtrain, dvalid, _ = get_xgb_dmatrices()
+
+    #     num_round = 999
+    #     watchlist = [(dtrain, 'train'), (dvalid, 'valid')]
+
+    #     xgbr = xgb.train(
+    #         params={**non_tunable_params, **tunable_params}, 
+    #         dtrain=dtrain, 
+    #         num_boost_round=num_round, 
+    #         evals=watchlist, 
+    #         early_stopping_rounds=10, 
+    #         verbose_eval=0
+    #     )
+    #     y_pred = xgbr.predict(dvalid)
+
+
+# # Features adapted to XGBoost
+# X_train_xgb = generate_features(X_train, data_origin='train', predictor='xgb')
+# X_val_xgb = generate_features(X_val, data_origin='train', predictor='xgb')
+# X_test_xgb = generate_features(test, data_origin='test', predictor='xgb')
+
+
+
+# def get_xgb_dmatrices():
+#     dtrain = xgb.DMatrix(data=X_train_xgb, label=y_train, enable_categorical=True)
+#     dvalid = xgb.DMatrix(data=X_val_xgb, label=y_val, enable_categorical=True)
+#     # dtest = xgb.DMatrix(data=X_test_xgb, enable_categorical=True)
+#     return dtrain, dvalid, None #
+
+
+# def get_xgb_params(trial: optuna.Trial = None):
+#     non_tunable_params = {
+#         'objective': 'reg:squarederror',
+#         'eval_metric': 'rmse',
+#         'disable_default_eval_metric': True,
+#         'seed': SEED
+#     }
+
+#     if trial is None:
+#         return 'xgb', non_tunable_params
+
+#     tunable_params = {
+#         'colsample_bytree': trial.suggest_float('colsample_bytree', 0.4, 0.9),
+#         'gamma': trial.suggest_float('gamma', 0, 0.5),
+#         'learning_rate': trial.suggest_float('learning_rate', 0.01, 0.3),
+#         'max_depth': trial.suggest_int('max_depth', 3, 9),
+#         # 'n_estimators': trial.suggest_int('n_estimators', 150, 350),
+#         'subsample': trial.suggest_float('subsample', 0.6, 1),
+#         'min_child_weight': trial.suggest_int('min_child_weight', 1, 5),
+#         'max_depth': trial.suggest_int('max_depth', 4, 9)
+#     }
+
+#     return 'xgb', non_tunable_params, tunable_params
+
+
+
+
+# Features adapted to h2o
+X_train_h2o = X_train_lgb
+X_val_h2o = X_val_lgb
+X_test_h20 = X_test_lgb

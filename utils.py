@@ -31,7 +31,6 @@ def object_encoder(df: pd.DataFrame):
 
 def nan_to_string(df: pd.DataFrame):
     nan = '#N/A'
-    # print('\n\n', df.isna().sum())
     cols = df[df.columns[df.isna().any()]].columns
     df[cols] = df[cols].fillna(nan)
     return df
