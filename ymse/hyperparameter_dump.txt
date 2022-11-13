@@ -18,6 +18,9 @@ params = {'iterations': 1000,
 
 params = {'colsample_bylevel': 0.07329097359385545, 'depth': 9, 'boosting_type': 'Plain', 'bootstrap_type': 'Bayesian', 'bagging_temperature': 1.1734504015536018}
 params = {'depth': 9, 'boosting_type': 'Plain', 'bootstrap_type': 'Bernoulli', 'subsample': 0.635180352520854}
+# params = {'colsample_bytree': 0.8601277878899238, 'eval_metric': 'rmsle', 'gamma': 0.12760202929262826, 'learning_rate': 0.07356461924449906, 'max_depth': 5, 'min_child_weight': 1, 'n_estimators': 306, 'objective': 'reg:squaredlogerror', 'subsample': 0.8993341396761092}
+params = {'colsample_bytree': 0.7717138210314867, 'learning_rate': 0.047506668950627134, 'max_depth': 8, 'min_child_weight': 3, 'n_estimators': 223, 'subsample': 0.9929036803032936}
+
 
 # params = {
     #     'max_depth': np.arange(4, 10),
@@ -108,3 +111,42 @@ Best trial (72):
 Value: 0.711248860913502
 Params:
 {'lambda_l1': 0.0166666730935842, 'lambda_l2': 0.07711845771465907, 'num_leaves': 12, 'feature_fraction': 0.8696975226415213, 'min_child_samples': 67, 'boosting_type': 'gbdt'}
+
+
+<Catboost>
+Number of finished trials: 51
+Best trial (38):
+Value: 0.7164880358105549
+Params:
+{'depth': 9, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'l2_leaf_reg': 4.077158772366956, 'subsample': 0.5858387998145075}
+
+<LGBM>
+Number of finished trials: 200
+Best trial (67):
+Value: 0.720211809513416
+Params:
+{'lambda_l1': 0.026873437304227192, 'lambda_l2': 9.270495297846024, 'num_leaves': 7, 'feature_fraction': 0.8633788253368204, 'min_child_samples': 81, 'boosting_type': 'gbdt'}
+
+
+
+Number of finished trials: 400
+Best trial (358):
+Value: 0.733105251548357
+Params:
+{'lambda_l1': 0.2607457426538709, 'lambda_l2': 7.17026486241634e-08, 'num_leaves': 16, 'feature_fraction': 0.6320106196724364, 'min_child_samples': 99, 'boosting_type': 'gbdt'}
+0.733105251548357
+
+
+
+[BEST RUN YET]
+Number of finished trials: 54
+Best trial (52):
+Value: 0.7236961561658326
+Params:
+{'depth': 9, 'boosting_type': 'Ordered', 'bootstrap_type': 'Bernoulli', 'l2_leaf_reg': 5.9540904170218365, 'subsample': 0.8438194595997762}
+
+Number of finished trials: 400
+Best trial (218):
+Value: 0.7330419242735857
+Params:
+{'lambda_l1': 1.566578553339183, 'lambda_l2': 4.276940430365952e-05, 'num_leaves': 24, 'feature_fraction': 0.5958696347616874, 'min_child_samples': 95, 'boosting_type': 'gbdt'}
